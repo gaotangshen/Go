@@ -16,5 +16,5 @@ func main() {
 }
 
 func sayHello(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Hello. world")
+	io.WriteString(w, "Hello. wold")
 }
