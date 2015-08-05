@@ -4,17 +4,26 @@ import (
 	// "io"
 	// "log"
 	// "net/http"
-	_ "Go/routers"
+	// _ "Go/routers"
+	"Go/controllers"
+	"Go/models"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
+
+func init() {
+	models.RegisterDB()
+}
 
 // type MainController struct {
 // 	beego.Controller
 // }
 
 func main() {
+	orm.Debug = true
+	orm.RunSyncdb("default", false, true)
 	// Router
-	// beego.Router("/", &MainController{})
+	beego.Router("/", &controllers.MainController{})
 	beego.Run()
 	// http.HandleFunc("/", sayHello)
 	// err := http.ListenAndServe(":8080", nil)
