@@ -4,8 +4,8 @@ import (
 	// "io"
 	// "log"
 	// "net/http"
+	_ "Go/routers"
 	"github.com/astaxie/beego"
-	_ "hello/routers"
 )
 
 // type MainController struct {
