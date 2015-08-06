@@ -1,35 +1,49 @@
-// package hello
+package main
 
-// import (
-// 	"io"
-// 	"log"
-// 	"net/http"
-// 	"os"
-// )
+import (
+	"io"
+	"net/http"
+	"time"
+)
 
-// func main() {
-// 	mux := http.NewServeMux()
-// 	mux.Handle("/", &myHandler{})
-// 	mux.HandleFunc("/hello", sayHello)
-// 	wd, err := os.Getwd()
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(wd))))
+func main() {
+	http.HandleFunc("/", Cookie)
+	http.HandleFunc("/2", Cookie2)
+	http.ListenAndServe(":8080", nil)
+}
 
-// 	err = http.ListenAndServe(":8080", mux)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// }
+func Cookie(w http.ResponseWriter, r *http.Request) {
+	expire := time.Now().AddDate(0, 0, 1)
+	ck := &http.Cookie{
+		Name:    "myCookie",
+		Value:   "hello",
+		Path:    "/",
+		Domain:  "localhost",
+		Expires: expire,
+		MaxAge:  3600,
+	}
+	http.SetCookie(w, ck)
 
-// type myHandler struct {
-// }
-
-// func (*myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-// 	io.WriteString(w, "url: "+r.URL.String())
-// }
-
-// func sayHello(w http.ResponseWriter, r *http.Request) {
-// 	io.WriteString(w, "Hello. world")
-// }
+	ck2, err := r.Cookie("myCookie")
+	if err != nil {
+		io.WriteString(w, err.Error())
+		return
+	}
+	io.WriteString(w, ck2.Value)
+}
+func Cookie2(w http.ResponseWriter, r *http.Request) {
+	ck := &http.Cookie{
+		Name:   "myCookie",
+		Value:  "hello",
+		Path:   "/",
+		Domain: "localhost",
+		MaxAge: 3600,
+	}
+	w.Header().Set("Set_Cookie", ck.String())
+	ck2, err := r.Cookie("myCookie")
+	if err != nil {
+		io.WriteString(w, err.Error())
+		return
+	}
+	io.WriteString(w, ck2.Value)
+}

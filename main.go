@@ -24,6 +24,8 @@ func main() {
 	orm.RunSyncdb("default", false, true)
 	// Router
 	beego.Router("/", &controllers.MainController{})
+	beego.Router("/category", &controllers.CategoryController{})
+	beego.Router("/login", &controllers.LoginController{})
 	beego.Run()
 	// http.HandleFunc("/", sayHello)
 	// err := http.ListenAndServe(":8080", nil)

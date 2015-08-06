@@ -1,0 +1,55 @@
+{{template "header"}}
+	<title>Home</title>
+</head>
+<body>
+	<nav class="navbar navbar-default ">
+		<div class="container">
+		{{template "navbar" .}}
+		</div>
+	</nav>
+	<div class="container">
+		<h1>Category</h1>
+		<form method="GET" action="/category">
+		  <div class="form-group">
+		    <label>Category Name</label>
+		    <input id="name" class="form-control" name="name" placeholder="Category Name">
+		  </div>
+		  <input type="hidden" name="op" value="add">
+		  <button type="submit" class="btn btn-default" onclick="return checkInput();">Add</button>
+		</form>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>name</th>
+					<th>number</th>
+					<th>manage</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{range .Categories}}
+				<tr>
+					<th>{{.Id}}</th>
+					<th>{{.Title}}</th>
+					<th>{{.TopicCount}}</th>
+					<th><a href="/category?op=del&id={{.Id}}">Delete</a></th>
+				</tr>
+				{{end}}
+			</tbody>
+		</table>
+		</div>
+		<script type="text/javascript">
+			function checkInput(){
+				var name=document.getElementById("name")
+				if(name.value.length==0){
+					alert("invalid input");
+					return false;
+				}
+				return true;
+			}
+		</script>
+	</div>
+	<script type="text/javascript" src="http://cdn.staticfile.org/jquery/2.1.1-rc2/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>
