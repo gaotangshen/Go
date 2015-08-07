@@ -26,6 +26,8 @@ func main() {
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/category", &controllers.CategoryController{})
 	beego.Router("/login", &controllers.LoginController{})
+	beego.AutoRouter(&controllers.TopicController{})
+	beego.Router("/topic", &controllers.TopicController{})
 	beego.Run()
 	// http.HandleFunc("/", sayHello)
 	// err := http.ListenAndServe(":8080", nil)

@@ -1,6 +1,7 @@
 package models
 
 import (
+	// "fmt"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/mattn/go-sqlite3"
@@ -20,7 +21,7 @@ type Category struct {
 	Title           string
 	Created         time.Time `orm:"auto_now_add;type(datetime);index"`
 	Views           int64     `orm:"index"`
-	TopicTime       time.Time `orm:"auto_now;type(datetime);index"`
+	TopicTime       time.Time `orm:"null;type(datetime);index"`
 	TopicCount      int64
 	TopicLastUserId int64
 }
@@ -34,7 +35,7 @@ type Topic struct {
 	Updated         time.Time `orm:"auto_now;type(datetime);index"`
 	Views           int64     `orm:"index"`
 	Author          string
-	ReplyTIme       time.Time `orm:"auto_now;type(datetime);index"`
+	ReplyTime       time.Time `orm:"null;type(datetime);index"`
 	ReplyCount      int64
 	ReplyLastUserId int64
 }
@@ -78,4 +79,25 @@ func GetAllCategories() ([]*Category, error) {
 	qs := o.QueryTable("category")
 	_, err := qs.All(&cates)
 	return cates, err
+}
+func AddTopic(title, content string) error {
+	// fmt.Sprint(title, content)
+	o := orm.NewOrm()
+	topic := &Topic{
+		Title:   title,
+		Content: content,
+	}
+	_, err := o.Insert(topic)
+	return err
+}
+
+// func ModifyTopic(tid, title, content string) error {
+// 	return error
+// }
+func GetAllTopics() ([]*Topic, error) {
+	o := orm.NewOrm()
+	topics := make([]*Topic, 0)
+	qs := o.QueryTable("Topic")
+	_, err := qs.All(&topics)
+	return topics, err
 }
