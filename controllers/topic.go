@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"Go/models"
+	// "fmt"
 	"github.com/astaxie/beego"
 )
 
@@ -30,7 +31,7 @@ func (this *TopicController) Post() {
 	content := this.Input().Get("content")
 	var err error
 	if len(tid) != 0 {
-		// err = models.ModifyTopic(tid, title, content)
+		err = models.ModifyTopic(tid, title, content)
 	} else {
 		err = models.AddTopic(title, content)
 	}
@@ -44,4 +45,19 @@ func (this *TopicController) Add() {
 	// this.Ctx.WriteString("add")
 	this.Data["IsLogin"] = checkAccount(this.Ctx)
 	this.TplNames = "topic_add.html"
+}
+func (this *TopicController) Modify() {
+	this.Data["IsLogin"] = checkAccount(this.Ctx)
+	if this.Data["IsLogin"] == false {
+		this.Redirect("/login", 302)
+		return
+	}
+	var err error
+	tid := this.Input().Get("tid")
+	t, err := models.GetTopic(tid)
+	this.Data["Blog"] = t
+	if err != nil {
+		beego.Error(err)
+	}
+	this.TplNames = "topic_modify.html"
 }

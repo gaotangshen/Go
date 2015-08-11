@@ -31,7 +31,7 @@ type Topic struct {
 	Title           string
 	Content         string `orm:"size(5000)"`
 	Attachment      string
-	Created         time.Time `orm:"auto_now_add;type(datetime);index"`
+	Created         time.Time `orm:"null;auto_now_add;type(datetime);index"`
 	Updated         time.Time `orm:"auto_now;type(datetime);index"`
 	Views           int64     `orm:"index"`
 	Author          string
@@ -91,9 +91,46 @@ func AddTopic(title, content string) error {
 	return err
 }
 
-// func ModifyTopic(tid, title, content string) error {
-// 	return error
-// }
+func ModifyTopic(tid, title, content string) error {
+	tidNum, err := strconv.ParseInt(tid, 10, 64)
+	if err != nil {
+		return err
+	}
+
+	o := orm.NewOrm()
+	topic := &Topic{Id: tidNum}
+	if o.Read(topic) == nil {
+		topic.Title = title
+		topic.Content = content
+		topic.Updated = time.Now()
+		o.Update(topic)
+	}
+	return nil
+	// tid, err := strconv.ParseInt(id, 10, 64)
+	// if err != nil {
+	// 	return err
+	// }
+	// o := orm.NewOrm()
+	// topic := &Topic{
+	// 	Id:      tid,
+	// 	Title:   title,
+	// 	Content: content,
+	// }
+	// _, err = o.Update(topic)
+	// return err
+}
+func GetTopic(id string) (*Topic, error) {
+
+	tid, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	o := orm.NewOrm()
+	t := &Topic{Id: tid}
+	qs := o.QueryTable("Topic")
+	err = qs.Filter("Id", tid).One(t)
+	return t, err
+}
 func GetAllTopics() ([]*Topic, error) {
 	o := orm.NewOrm()
 	topics := make([]*Topic, 0)

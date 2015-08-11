@@ -8,13 +8,15 @@
 		</div>
 	</nav>
 	<div class="container">
+		{{range .blogs}}
 		<div class="page-header">
-			<h1> First Blog</h1>
-			<h6 class="text-muted">Posted on 2015, 100 views, 200 comments</h6>
+			<h1> {{.Title}}</h1>
+			<h6 class="text-muted">Posted on {{.Created}}, {{.Views}} views, {{.ReplyCount}} comments</h6>
 			<p>
-				Welcome, this is my first blog.
+				{{.Content}}
 			</p>
 		</div>
+		{{end}}
 	</div>
 	<script type="text/javascript" src="http://cdn.staticfile.org/jquery/2.1.1-rc2/jquery.min.js"></script>
 	<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
