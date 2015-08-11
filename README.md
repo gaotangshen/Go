@@ -1,1 +1,2 @@
 # Go
+simple Go blog
